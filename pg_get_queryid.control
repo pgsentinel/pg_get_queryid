@@ -1,0 +1,4 @@
+comment = 'get last queryid generated/used by pg_stat_statements for a given backend pid'
+default_version = '1.0'
+module_pathname = '$libdir/pg_get_queryid'
+relocatable = true
