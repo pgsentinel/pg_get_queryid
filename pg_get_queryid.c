@@ -239,12 +239,18 @@ pg_get_queryid(PG_FUNCTION_ARGS)
 {
 	int i;
 
+	LWLockAcquire(ProcArrayLock, LW_SHARED);
+
 	for (i = 0; i < ProcGlobal->allProcCount; i++)
 	{
 		PGPROC  *proc = &ProcGlobal->allProcs[i];
 		if (proc != NULL && proc->pid != 0 && proc->pid == PG_GETARG_INT32(0))
+		{
+			LWLockRelease(ProcArrayLock);
 			return QueryIdArray[i];
+		}
 	}
+	LWLockRelease(ProcArrayLock);
 	return 0;
 }
 
